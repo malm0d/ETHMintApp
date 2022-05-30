@@ -14,11 +14,15 @@ After cloning the repository, open a terminal and change to the project's direct
 
 In the /client directory, you can run:
 
+### `npm install`
+
+Followed by:
+
 ### `npm start`
 
-Runs the app in the development mode.\
+Installs and then runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
-You may also see any lint errors in the console.
+You may also see any lint errors in the console.\
 More instructions are available in /client/README.md
