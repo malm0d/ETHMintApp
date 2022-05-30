@@ -94,9 +94,9 @@ export default function MainPage() {
     const mintErc20 = async (value) => {
         console.log("mint");
         console.log(value);
-        //const res = contracts.erc20.methods.mint(account1, 1).send({from: account1});
-        //console.log(res);
-        //setMintResponse(res);
+        const res = contracts.erc20.methods.mint(account1, value).send({from: account1});
+        console.log(res);
+        setMintResponse(res);
     }
 
     const mintErc721 = async () => {
@@ -125,7 +125,7 @@ export default function MainPage() {
             display: "flex",
             justifyContent: "space-evenly",
             alignItems: "center",
-            padding: "100px"
+            padding: "50px"
         }}>
             <Paper elevation={12} sx={{display: "flex", justifyContent: "space-between", width: "100%", padding: "75px" }} square={false}>
             <Grid container rowSpacing={2}>
@@ -140,8 +140,17 @@ export default function MainPage() {
             </Grid>
             </Paper>
         </Box >
-      </Box>
-      
+        <Box sx={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            padding: "100px"
+        }}>
+            <Typography variant="button" sx={{color: "#002984"}}>
+            *Page refreshes every 10 seconds
+            </Typography>
+        </Box>
+    </Box>
     )
 
 }
