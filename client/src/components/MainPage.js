@@ -120,7 +120,6 @@ export default function MainPage() {
       }
     };
 
-  
     useEffect( async () => {
       const web3 = await getWeb3();
       const account = await loadAccount(web3);
@@ -135,7 +134,6 @@ export default function MainPage() {
         ethereum.removeListener("accountsChanged", handleAccountChange);
       }
     }, [mintResponse, account1]);
-  
   
     return (
     <Box>
