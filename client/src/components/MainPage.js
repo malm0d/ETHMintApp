@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 
 export default function MainPage() {
+    const { ethereum } = window;
     const [account1, setAccount1] = useState("");
     const [contracts, setContracts] = useState("");
     const [erc20Contract, setErc20Contract] = useState(
@@ -30,6 +31,7 @@ export default function MainPage() {
   
     const loadAccount = async (web3) => {
       const accounts = await web3.eth.getAccounts();
+      console.log(accounts);
       if (accounts) {
         let _account1 = accounts[0];
         setAccount1(_account1);
@@ -106,17 +108,33 @@ export default function MainPage() {
         setMintResponse(res);
     }
 
+    const handleAccountChange = (...args) => {
+      const accounts = args[0];
+      if (accounts.length === 0) {
+        console.log("Connect to MetaMask");
+      }
+      else if (accounts[0] !== account1) {
+        setAccount1(accounts[0]);
+        console.log(accounts[0]);
+        window.location.reload(false);
+      }
+    };
+
   
     useEffect( async () => {
       const web3 = await getWeb3();
       const account = await loadAccount(web3);
+      ethereum.on("accountsChanged", handleAccountChange);
       const contracts = await loadContracts(web3, account);
       const interval = setInterval(() => {
           loadContracts(web3, account);
       }, 10000);
       setContracts(contracts);
-      return () => clearInterval(interval);
-    }, [mintResponse]);
+      return () => {
+        clearInterval(interval);
+        ethereum.removeListener("accountsChanged", handleAccountChange);
+      }
+    }, [mintResponse, account1]);
   
   
     return (
@@ -143,11 +161,19 @@ export default function MainPage() {
         <Box sx={{
             display: "flex",
             justifyContent: "space-evenly",
-            alignItems: "center",
-            padding: "100px"
+            alignItems: "center"
         }}>
             <Typography variant="button" sx={{color: "#002984"}}>
             *Page refreshes every 10 seconds
+            </Typography>
+        </Box>
+        <Box sx={{
+            display: "flex",
+            justifyContent: "space-evenly",
+            alignItems: "center"
+        }}>
+            <Typography variant="button" sx={{color: "#002984"}}>
+            **It may take a moment for the supply and token count to be updated
             </Typography>
         </Box>
     </Box>
