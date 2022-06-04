@@ -4,8 +4,7 @@
     {
       "inputs": [],
       "stateMutability": "payable",
-      "type": "constructor",
-      "payable": true
+      "type": "constructor"
     },
     {
       "anonymous": false,
@@ -123,8 +122,7 @@
     },
     {
       "stateMutability": "payable",
-      "type": "fallback",
-      "payable": true
+      "type": "fallback"
     },
     {
       "inputs": [
@@ -156,8 +154,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -170,8 +167,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -214,8 +210,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -239,8 +234,7 @@
     },
     {
       "stateMutability": "payable",
-      "type": "receive",
-      "payable": true
+      "type": "receive"
     },
     {
       "inputs": [],
@@ -253,8 +247,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -267,8 +260,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -281,8 +273,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -295,8 +286,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -315,8 +305,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -417,8 +406,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -13907,8 +13895,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-05-29T12:38:30.636Z",
-  "networkType": "ethereum",
+  "updatedAt": "2022-06-04T13:23:18.113Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

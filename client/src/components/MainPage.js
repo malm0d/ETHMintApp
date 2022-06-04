@@ -26,6 +26,8 @@ export default function MainPage() {
       }
     );
     const [mintResponse, setMintResponse] = useState(null);
+    const [transferResponse, setTransferResponse] = useState(null);
+    const [burnResponse, setBurnResponse] = useState(null);
     const [erc20Balance, setErc20Balance] = useState(null);
     const [erc721Balance, setErc721Balance] = useState(null);
   
@@ -94,18 +96,36 @@ export default function MainPage() {
     }
 
     const mintErc20 = async (value) => {
-        console.log("mint");
-        console.log(value);
-        const res = contracts.erc20.methods.mint(account1, value).send({from: account1});
-        console.log(res);
-        setMintResponse(res);
+      console.log("mint: " + value);
+      const res = contracts.erc20.methods.mint(account1, value).send({from: account1});
+      console.log(res);
+      setMintResponse(res);
     }
 
     const mintErc721 = async () => {
-        console.log("mint");
-        const res = contracts.erc721.methods.mint(account1).send({from: account1});
-        console.log(res);
-        setMintResponse(res);
+      console.log("mint");
+      const res = contracts.erc721.methods.mint(account1).send({from: account1});
+      console.log(res);
+      setMintResponse(res);
+    }
+
+    const transferErc20 = async (value, to) => {
+      console.log("transfer: " + value + " to : " + to);
+      const res = contracts.erc20.methods.transfer(to, value).send({from: account1});
+      console.log(res);
+      setTransferResponse(res);
+    }
+
+    const transferErc721 = async (value, to) => {
+
+    }
+
+    const burnErc20 = async (value) => {
+
+    }
+
+    const burnErc721 = async (value) => {
+
     }
 
     const handleAccountChange = (...args) => {
@@ -123,7 +143,6 @@ export default function MainPage() {
     useEffect( async () => {
       const web3 = await getWeb3();
       const account = await loadAccount(web3);
-      ethereum.on("accountsChanged", handleAccountChange);
       const contracts = await loadContracts(web3, account);
       const interval = setInterval(() => {
           loadContracts(web3, account);
@@ -131,10 +150,17 @@ export default function MainPage() {
       setContracts(contracts);
       return () => {
         clearInterval(interval);
+      }
+    }, [mintResponse]);
+
+    useEffect( async () => {
+      ethereum.on("accountsChanged", handleAccountChange);
+      return () => {
         ethereum.removeListener("accountsChanged", handleAccountChange);
       }
-    }, [mintResponse, account1]);
-  
+    }, [account1])
+
+
     return (
     <Box>
         <Box sx={{
@@ -146,12 +172,12 @@ export default function MainPage() {
             <Paper elevation={12} sx={{display: "flex", justifyContent: "space-between", width: "100%", padding: "75px" }} square={false}>
             <Grid container rowSpacing={2}>
                 <Grid item xs = {5}>
-                <Erc20Form contract={erc20Contract} onMint={mintErc20}></Erc20Form>
+                <Erc20Form contract={erc20Contract} onMint={mintErc20} onTransfer={transferErc20} onBurn={burnErc20}></Erc20Form>
                 </Grid>
                 <Grid item xs = {2}>
                 </Grid>
                 <Grid item xs = {5}>
-                <Erc721Form contract={erc721Contract} onMint={mintErc721}></Erc721Form>
+                <Erc721Form contract={erc721Contract} onMint={mintErc721} onTransfer={transferErc721} onBurn={burnErc721}></Erc721Form>
                 </Grid>
             </Grid>
             </Paper>
