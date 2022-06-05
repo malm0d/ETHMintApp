@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/ETHMintApp/static/css/main.5e4e9510.chunk.css",
+    "main.js": "/ETHMintApp/static/js/main.79985787.chunk.js",
+    "main.js.map": "/ETHMintApp/static/js/main.79985787.chunk.js.map",
+    "runtime-main.js": "/ETHMintApp/static/js/runtime-main.8efeb94e.js",
+    "runtime-main.js.map": "/ETHMintApp/static/js/runtime-main.8efeb94e.js.map",
+    "static/js/2.acb5779b.chunk.js": "/ETHMintApp/static/js/2.acb5779b.chunk.js",
+    "static/js/2.acb5779b.chunk.js.map": "/ETHMintApp/static/js/2.acb5779b.chunk.js.map",
+    "index.html": "/ETHMintApp/index.html",
+    "precache-manifest.9e4bb178942e53706809e2269db39dfa.js": "/ETHMintApp/precache-manifest.9e4bb178942e53706809e2269db39dfa.js",
+    "service-worker.js": "/ETHMintApp/service-worker.js",
+    "static/css/main.5e4e9510.chunk.css.map": "/ETHMintApp/static/css/main.5e4e9510.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.8efeb94e.js",
+    "static/js/2.acb5779b.chunk.js",
+    "static/css/main.5e4e9510.chunk.css",
+    "static/js/main.79985787.chunk.js"
+  ]
+}
