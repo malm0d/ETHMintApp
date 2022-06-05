@@ -40,7 +40,7 @@ export default function MainPage() {
   
     const loadAccount = async (web3) => {
       const accounts = await web3.eth.getAccounts();
-      console.log(accounts);
+      //console.log(accounts);
       if (accounts) {
         let _account1 = accounts[0];
         setAccount1(_account1);
@@ -102,7 +102,7 @@ export default function MainPage() {
     }
 
     const mintErc20 = async (value) => {
-      console.log("mint: " + value);
+      //console.log("mint: " + value);
       contracts.erc20.methods.mint(account1, value).send({from: account1})
       .then(function(receipt) {
         setMintErc20Response(receipt);
@@ -190,7 +190,7 @@ export default function MainPage() {
       }
       else if (accounts[0] !== account1) {
         setAccount1(accounts[0]);
-        console.log(accounts[0]);
+        //console.log(accounts[0]);
         window.location.reload(false);
       }
     };
