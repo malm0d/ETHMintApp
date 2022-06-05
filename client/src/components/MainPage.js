@@ -5,8 +5,11 @@ import MalcolmERC721 from "../contracts/MalcolmERC721.json"
 import Erc20Form from "./Erc20Form";
 import Erc721Form from "./Erc721Form";
 import { Box, Typography } from "@mui/material/";
+import {Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import Web3 from "web3";
 
 export default function MainPage() {
     const { ethereum } = window;
@@ -25,11 +28,15 @@ export default function MainPage() {
         symbol: "",
       }
     );
-    const [mintResponse, setMintResponse] = useState(null);
+    const [mintErc20Response, setMintErc20Response] = useState(null);
+    const [mintErc721Receipt, setMintErc721Receipt] = useState(null);
     const [transferResponse, setTransferResponse] = useState(null);
     const [burnResponse, setBurnResponse] = useState(null);
     const [erc20Balance, setErc20Balance] = useState(null);
     const [erc721Balance, setErc721Balance] = useState(null);
+    const [erc20AddressIsValid, setErc20AddressIsValid] = useState(null);
+    const [erc721AddressIsValid, setErc721AddressIsValid] = useState(null);
+    const [openDialogue, setOpenDialogue] = useState(false);
   
     const loadAccount = async (web3) => {
       const accounts = await web3.eth.getAccounts();
@@ -88,8 +95,7 @@ export default function MainPage() {
       const contracts = {
         erc20: _erc20Contract,
         erc721: _erc721Contract
-      }
-  
+      };
       console.log(contracts);
       return contracts;
       
@@ -97,47 +103,104 @@ export default function MainPage() {
 
     const mintErc20 = async (value) => {
       console.log("mint: " + value);
-      const res = contracts.erc20.methods.mint(account1, value).send({from: account1});
-      console.log(res);
-      setMintResponse(res);
-    }
+      contracts.erc20.methods.mint(account1, value).send({from: account1})
+      .then(function(receipt) {
+        setMintErc20Response(receipt);
+        //console.log(receipt);
+      });
+    };
 
     const mintErc721 = async () => {
       console.log("mint");
-      const res = contracts.erc721.methods.mint(account1).send({from: account1});
-      console.log(res);
-      setMintResponse(res);
-    }
+      contracts.erc721.methods.mint(account1).send({from: account1})
+      .then(function(receipt) {
+        setMintErc721Receipt(receipt);
+        //console.log(receipt);
+      });
+    };
 
     const transferErc20 = async (value, to) => {
-      console.log("transfer: " + value + " to : " + to);
-      const res = contracts.erc20.methods.transfer(to, value).send({from: account1});
-      console.log(res);
-      setTransferResponse(res);
+      console.log("Checking address...");
+      let addressValid = Web3.utils.isAddress(to);
+      if (addressValid) {
+        setErc20AddressIsValid(true);
+        console.log("transfer: " + value + " to : " + to);
+        contracts.erc20.methods.transfer(to, value).send({from: account1})
+        .then(function(receipt) {
+          setTransferResponse(receipt);
+          //console.log(receipt);
+        });
+      }
+      else {
+        console.log("Invalid address");
+        setErc20AddressIsValid(false);
+        handleDialogueOpen();
+      }
     }
 
-    const transferErc721 = async (value, to) => {
-
-    }
+    const transferErc721 = async (to) => {
+      console.log("Checking address...");
+      let addressValid = Web3.utils.isAddress(to);
+      if (addressValid) {
+        setErc721AddressIsValid(true);
+        const res = await contracts.erc721.getPastEvents("allEvents", {fromBlock: "earliest"});
+        const mostRecentTokenId = res[res.length - 1].returnValues.tokenId;
+        //console.log(mostRecentTokenId);
+        console.log("transfer token to : " + to);
+        contracts.erc721.methods.transfer(to, mostRecentTokenId).send({from: account1})
+        .then(function(receipt) {
+          setTransferResponse(receipt);
+          //console.log(receipt);
+        });
+      }
+      else {
+        console.log("Invalid address");
+        setErc721AddressIsValid(false);
+        handleDialogueOpen();
+      }
+    };
 
     const burnErc20 = async (value) => {
+      console.log("Burning " + value + " tokens");
+      contracts.erc20.methods.burn(value).send({from: account1})
+      .then(function(receipt) {
+        setBurnResponse(receipt);
+        //console.log(receipt);
+      });
+    };
 
-    }
-
-    const burnErc721 = async (value) => {
-
+    const burnErc721 = async () => {
+      console.log("Burning token");
+      const res = await contracts.erc721.getPastEvents("allEvents", {fromBlock: "earliest"});
+      //console.log(res);
+      //console.log(res[res.length - 1]);
+      const mostRecentTokenId = res[res.length - 1].returnValues.tokenId;
+      //console.log(mostRecentTokenId);
+      contracts.erc721.methods.burn(mostRecentTokenId).send({from: account1})
+      .then(function(receipt) {
+        setBurnResponse(receipt);
+        //console.log(receipt);
+      });
     }
 
     const handleAccountChange = (...args) => {
       const accounts = args[0];
       if (accounts.length === 0) {
-        console.log("Connect to MetaMask");
+        console.log("Please connect to MetaMask");
       }
       else if (accounts[0] !== account1) {
         setAccount1(accounts[0]);
         console.log(accounts[0]);
         window.location.reload(false);
       }
+    };
+
+    const handleDialogueOpen = () => {
+      setOpenDialogue(true);
+    };
+
+    const handleDialogueClose = () => {
+      setOpenDialogue(false);
     };
 
     useEffect( async () => {
@@ -151,7 +214,7 @@ export default function MainPage() {
       return () => {
         clearInterval(interval);
       }
-    }, [mintResponse]);
+    }, []);
 
     useEffect( async () => {
       ethereum.on("accountsChanged", handleAccountChange);
@@ -197,9 +260,26 @@ export default function MainPage() {
             alignItems: "center"
         }}>
             <Typography variant="button" sx={{color: "#002984"}}>
-            **It may take a moment for the supply and token count to be updated
+            **It may take a moment for the balances, supply and token count to be updated**
             </Typography>
         </Box>
+
+        <Dialog
+          open={openDialogue}
+          onClose={handleDialogueClose}
+        >
+          <DialogTitle>
+            Invalid Transfer Address
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Please ensure address is a valid Ethereum address
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogueClose}>OK</Button>
+          </DialogActions>
+        </Dialog>
     </Box>
     )
 
